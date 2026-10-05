@@ -1,0 +1,708 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>شام للطاقة الشمسية — مستشار الطاقة</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@500;700;800;900&family=IBM+Plex+Sans+Arabic:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --navy: #14110A;
+    --navy-2: #1E1A10;
+    --teal: #5A3F17;
+    --teal-2: #7A571E;
+    --amber: #E8A23D;
+    --amber-2: #F2C25C;
+    --cream: #F4EEDF;
+    --white: #FBF8F2;
+    --ink: #16222E;
+    --line: rgba(244,238,223,0.14);
+    --line-soft: rgba(20,30,45,0.1);
+    --shadow: 0 18px 40px rgba(7,12,20,0.35);
+    --radius: 14px;
+  }
+  *{ box-sizing:border-box; }
+  html,body{ margin:0; padding:0; }
+  body{
+    background: var(--navy);
+    color: var(--cream);
+    font-family: 'IBM Plex Sans Arabic', sans-serif;
+    line-height:1.7;
+    -webkit-font-smoothing:antialiased;
+  }
+  h1,h2,h3,.brand,.num{
+    font-family:'Tajawal','IBM Plex Sans Arabic',sans-serif;
+  }
+  .app{ max-width:640px; margin:0 auto; min-height:100vh; position:relative; overflow-x:hidden; }
+  a{ color:inherit; }
+  button{ font-family:inherit; cursor:pointer; }
+
+  /* ---------- topbar ---------- */
+  .topbar{
+    display:flex; align-items:center; gap:12px;
+    padding:20px 22px 16px;
+    border-bottom:1px solid var(--line);
+  }
+  .mark{ width:44px; height:44px; flex:none; }
+  .brandblock .brand{ font-size:1.12rem; font-weight:800; letter-spacing:0.2px; }
+  .brandblock .tagline{ font-size:0.78rem; color:var(--amber-2); font-weight:500; }
+
+  /* ---------- hero ---------- */
+  .hero{ position:relative; padding:36px 22px 30px; overflow:hidden; }
+  .hero-art{ position:absolute; inset:0; pointer-events:none; opacity:0.9; }
+  .hero-copy{ position:relative; z-index:2; }
+  .hero h1{
+    font-size:clamp(1.7rem, 6.2vw, 2.35rem);
+    font-weight:800; line-height:1.28; margin:0 0 14px;
+    max-width:20ch;
+  }
+  .hero h1 .accent{ color:var(--amber-2); }
+  .hero p{
+    color:rgba(244,238,223,0.78); font-size:0.98rem; margin:0 0 22px; max-width:42ch;
+  }
+  .cta{
+    display:inline-flex; align-items:center; gap:10px;
+    background:var(--amber); color:#1A1305;
+    border:none; border-radius:999px;
+    padding:13px 24px; font-size:0.98rem; font-weight:700;
+    box-shadow: 0 10px 24px rgba(232,162,61,0.28);
+  }
+  .cta:active{ transform:translateY(1px); }
+  .cta svg{ width:18px; height:18px; transform:scaleX(-1); }
+
+  .rivers{ position:absolute; left:-10%; right:-10%; bottom:-6px; height:120px; opacity:0.5; }
+
+  /* ---------- wizard shell ---------- */
+  .wizard{ padding:8px 22px 60px; }
+  .progress{
+    display:flex; gap:8px; margin: 10px 0 26px;
+  }
+  .progress .seg{ flex:1; height:4px; border-radius:3px; background:var(--line); overflow:hidden; }
+  .progress .seg i{ display:block; height:100%; width:0%; background:var(--amber); transition:width .35s ease; }
+
+  .stephead{ display:flex; align-items:baseline; gap:10px; margin-bottom:6px; }
+  .stepno{
+    font-family:'Tajawal',sans-serif; font-weight:800; font-size:0.85rem;
+    color:var(--navy); background:var(--amber-2);
+    width:26px; height:26px; border-radius:50%;
+    display:flex; align-items:center; justify-content:center; flex:none;
+  }
+  .stepdot{ opacity:0.6; }
+  .stephead-text h2{ font-size:1.28rem; margin:0 0 2px; font-weight:800; }
+  .stephead-sub{ color:rgba(244,238,223,0.62); font-size:0.88rem; margin:0 0 22px; }
+
+  /* ---------- cards for choices ---------- */
+  .choices{ display:grid; gap:12px; margin-bottom:26px; }
+  .choice{
+    display:flex; align-items:center; gap:14px;
+    padding:16px 16px; text-align:right;
+    background:var(--navy-2); border:1px solid var(--line);
+    border-radius:12px; border-inline-end:3px solid transparent;
+    color:var(--cream); transition:border-color .15s ease, background .15s ease;
+  }
+  .choice .ic{ width:38px; height:38px; flex:none; color:var(--amber-2); }
+  .choice .cc-title{ font-weight:700; font-size:0.98rem; margin-bottom:2px; }
+  .choice .cc-sub{ font-size:0.8rem; color:rgba(244,238,223,0.6); }
+  .choice.selected{
+    border-inline-end-color:var(--amber);
+    background:linear-gradient(90deg, rgba(232,162,61,0.14), rgba(232,162,61,0.03));
+  }
+  .choice.selected .ic{ color:var(--amber); }
+
+  /* ---------- load step ---------- */
+  .period{
+    background:var(--navy-2); border:1px solid var(--line); border-radius:12px;
+    padding:16px 16px 14px; margin-bottom:14px; border-inline-start:3px solid var(--teal-2);
+  }
+  .period.evening{ border-inline-start-color:var(--amber-2); }
+  .period.night{ border-inline-start-color:#8892B0; }
+  .period-top{ display:flex; justify-content:space-between; align-items:center; margin-bottom:2px; }
+  .period-name{ font-weight:700; font-size:0.96rem; }
+  .period-hours{ font-size:0.78rem; color:rgba(244,238,223,0.55); }
+  .period-src{ font-size:0.76rem; color:var(--amber-2); margin-bottom:10px; }
+  .amp-row{ display:flex; align-items:center; gap:12px; }
+  input[type=range]{
+    -webkit-appearance:none; flex:1; height:4px; border-radius:3px;
+    background:rgba(244,238,223,0.18); outline:none;
+  }
+  input[type=range]::-webkit-slider-thumb{
+    -webkit-appearance:none; width:20px; height:20px; border-radius:50%;
+    background:var(--amber); border:3px solid var(--navy); box-shadow:0 0 0 1px var(--amber);
+  }
+  .amp-val{
+    font-family:'Tajawal',sans-serif; font-weight:800; font-size:1.02rem;
+    min-width:66px; text-align:center;
+    background:rgba(0,0,0,0.2); border-radius:8px; padding:6px 4px;
+  }
+  .amp-val span{ font-size:0.7rem; font-weight:500; color:rgba(244,238,223,0.55); }
+
+  /* ---------- nav buttons ---------- */
+  .stepnav{ display:flex; gap:10px; margin-top:8px; }
+  .btn{
+    flex:1; border:none; border-radius:10px; padding:14px; font-weight:700; font-size:0.95rem;
+  }
+  .btn-primary{ background:var(--amber); color:#1A1305; }
+  .btn-ghost{ background:transparent; color:var(--cream); border:1px solid var(--line); flex:0 0 auto; padding:14px 20px; }
+  .btn:disabled{ opacity:0.4; }
+
+  /* ---------- results ---------- */
+  .reco-card{
+    background:linear-gradient(160deg, var(--teal), var(--teal-2));
+    border-radius:16px; padding:22px 20px; margin-bottom:18px; box-shadow:var(--shadow);
+  }
+  .reco-label{ font-size:0.78rem; color:rgba(244,238,223,0.75); margin-bottom:6px; }
+  .reco-title{ font-family:'Tajawal',sans-serif; font-weight:800; font-size:1.5rem; margin:0 0 14px; }
+  .reco-grid{ display:grid; grid-template-columns:1fr 1fr; gap:10px; }
+  .reco-item{ background:rgba(0,0,0,0.16); border-radius:10px; padding:10px 12px; }
+  .reco-item .k{ font-size:0.72rem; color:rgba(244,238,223,0.65); margin-bottom:3px; }
+  .reco-item .v{ font-family:'Tajawal',sans-serif; font-weight:800; font-size:1.02rem; }
+
+  .section-title{ font-weight:700; font-size:1.02rem; margin:26px 0 12px; }
+
+  .toggle-row{ display:flex; gap:8px; margin-bottom:14px; }
+  .toggle{
+    flex:1; padding:10px; border-radius:9px; border:1px solid var(--line);
+    background:var(--navy-2); color:rgba(244,238,223,0.7); font-size:0.86rem; font-weight:600;
+  }
+  .toggle.active{ background:var(--amber); color:#1A1305; border-color:var(--amber); }
+
+  .chart-wrap{
+    background:var(--navy-2); border:1px solid var(--line); border-radius:12px; padding:16px; margin-bottom:16px;
+  }
+  .timeline{
+    background:var(--navy-2); border:1px solid var(--line); border-radius:12px; padding:16px; margin-bottom:22px;
+  }
+  .timeline-bar{ display:flex; height:34px; border-radius:8px; overflow:hidden; margin-bottom:10px; }
+  .timeline-seg{ display:flex; align-items:center; justify-content:center; font-size:0.72rem; font-weight:700; color:#0E1A2B; }
+  .timeline-legend{ display:flex; gap:16px; font-size:0.76rem; color:rgba(244,238,223,0.65); }
+  .legend-dot{ width:9px; height:9px; border-radius:50%; display:inline-block; margin-inline-end:5px; }
+
+  .compare{ display:grid; grid-template-columns:1fr 1fr; gap:10px; margin-bottom:24px; }
+  .compare .col{ background:var(--navy-2); border:1px solid var(--line); border-radius:12px; padding:14px; }
+  .compare .col h4{ margin:0 0 8px; font-size:0.88rem; }
+  .compare .col ul{ margin:0; padding-inline-start:18px; font-size:0.8rem; color:rgba(244,238,223,0.72); }
+  .compare .col li{ margin-bottom:5px; }
+  .compare .col.hi{ border-color:var(--amber); }
+
+  .note{ font-size:0.78rem; color:rgba(244,238,223,0.5); margin-bottom:26px; }
+
+  /* ---------- contact ---------- */
+  .contact-card{
+    background:var(--cream); color:var(--ink); border-radius:16px; padding:22px 20px; margin-bottom:10px;
+  }
+  .contact-card h3{ margin:0 0 4px; font-size:1.12rem; }
+  .contact-card p{ margin:0 0 16px; font-size:0.86rem; color:rgba(22,34,46,0.65); }
+  .mgr{ display:flex; align-items:center; justify-content:space-between; padding:12px 0; border-top:1px solid var(--line-soft); }
+  .mgr-name{ font-weight:700; font-size:0.94rem; }
+  .mgr-role{ font-size:0.76rem; color:rgba(22,34,46,0.55); }
+  .mgr-actions{ display:flex; gap:8px; }
+  .icon-btn{
+    width:40px; height:40px; border-radius:50%; display:flex; align-items:center; justify-content:center;
+    border:1px solid rgba(22,34,46,0.14); color:var(--ink);
+  }
+  .icon-btn.wa{ background:#1C5A3E; color:#fff; border-color:transparent; }
+  .icon-btn svg{ width:18px; height:18px; }
+  .restart{
+    display:block; width:100%; text-align:center; margin-top:18px; background:none; border:1px dashed var(--line);
+    border-radius:10px; padding:12px; color:rgba(244,238,223,0.6); font-size:0.86rem;
+  }
+
+  footer{
+    padding:22px 22px 14px; text-align:center; font-size:0.76rem; color:rgba(244,238,223,0.4);
+  }
+  .credit-bar{
+    padding:10px 16px 16px; text-align:center; font-size:0.72rem;
+    color:rgba(244,238,223,0.35); border-top:1px solid var(--line);
+  }
+  [hidden]{ display:none !important; }
+
+  @media (max-width:380px){
+    .reco-grid{ grid-template-columns:1fr; }
+  }
+</style>
+</head>
+<body>
+<div class="app">
+
+  <div class="topbar">
+    <svg class="mark" viewBox="0 0 48 48" fill="none">
+      <g stroke="#E8A23D" stroke-width="2.2" stroke-linecap="round">
+        <line x1="24" y1="2" x2="24" y2="9"/>
+        <line x1="24" y1="39" x2="24" y2="46"/>
+        <line x1="8.5" y1="8.5" x2="13.5" y2="13.5"/>
+        <line x1="34.5" y1="34.5" x2="39.5" y2="39.5"/>
+        <line x1="2" y1="24" x2="9" y2="24"/>
+        <line x1="39" y1="24" x2="46" y2="24"/>
+        <line x1="8.5" y1="39.5" x2="13.5" y2="34.5"/>
+        <line x1="34.5" y1="13.5" x2="39.5" y2="8.5"/>
+      </g>
+      <circle cx="24" cy="24" r="9" fill="#E8A23D"/>
+    </svg>
+    <div class="brandblock">
+      <div class="brand">شام للطاقة الشمسية</div>
+      <div class="tagline">مستشار الطاقة الذكي</div>
+    </div>
+  </div>
+
+  <!-- HERO -->
+  <section class="hero" id="hero">
+    <svg class="hero-art" viewBox="0 0 640 260" preserveAspectRatio="none">
+      <defs>
+        <linearGradient id="skyfade" x1="0" y1="0" x2="0" y2="1">
+          <stop offset="0" stop-color="#E8A23D" stop-opacity="0.16"/>
+          <stop offset="1" stop-color="#E8A23D" stop-opacity="0"/>
+        </linearGradient>
+      </defs>
+      <rect x="0" y="0" width="640" height="260" fill="url(#skyfade)"/>
+      <circle cx="320" cy="70" r="26" fill="none" stroke="#E8A23D" stroke-width="2" opacity="0.6"/>
+      <circle cx="320" cy="70" r="7" fill="#F2C25C"/>
+      <g stroke="#E8A23D" stroke-width="2" opacity="0.45" stroke-linecap="round">
+        <line x1="320" y1="20" x2="320" y2="32"/>
+        <line x1="320" y1="108" x2="320" y2="120"/>
+        <line x1="270" y1="70" x2="282" y2="70"/>
+        <line x1="358" y1="70" x2="370" y2="70"/>
+        <line x1="284" y1="34" x2="292" y2="42"/>
+        <line x1="348" y1="98" x2="356" y2="106"/>
+        <line x1="284" y1="106" x2="292" y2="98"/>
+        <line x1="348" y1="42" x2="356" y2="34"/>
+      </g>
+      <path d="M0 210 C 130 170, 210 240, 340 200 C 460 165, 540 225, 640 195" stroke="#7A571E" stroke-width="2" fill="none" opacity="0.5"/>
+    </svg>
+    <div class="hero-copy">
+      <h1>كم منظومة طاقة شمسية <span class="accent">يحتاجها بيتك أو مشروعك؟</span></h1>
+      <p>أجب عن أربعة أسئلة بسيطة عن استهلاكك اليومي، ومستشار الطاقة يقترح لك فورًا حجم المنظومة ونوع البطارية وعدد الألواح المناسبة.</p>
+      <button class="cta" id="startBtn">ابدأ التقييم
+        <svg viewBox="0 0 24 24" fill="none"><path d="M5 12h14M13 6l6 6-6 6" stroke="#1A1305" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+      </button>
+    </div>
+  </section>
+
+  <!-- WIZARD -->
+  <section class="wizard" id="wizard" hidden>
+    <div class="progress">
+      <div class="seg"><i id="p1"></i></div>
+      <div class="seg"><i id="p2"></i></div>
+      <div class="seg"><i id="p3"></i></div>
+      <div class="seg"><i id="p4"></i></div>
+    </div>
+
+    <!-- STEP 1 -->
+    <div class="step" id="step1">
+      <div class="stephead"><div class="stepno">1</div><div class="stephead-text"><h2>نوع النشاط</h2></div></div>
+      <p class="stephead-sub">اختر الوصف الأقرب لاستخدامك حتى نُخصّص التوصية.</p>
+      <div class="choices" id="activityChoices">
+        <button class="choice" data-val="منزلي">
+          <svg class="ic" viewBox="0 0 24 24" fill="none"><path d="M4 11L12 4l8 7M6 10v9h5v-6h2v6h5v-9" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg>
+          <div><div class="cc-title">منزلي</div><div class="cc-sub">تغطية أحمال البيت الأساسية والإضاءة</div></div>
+        </button>
+        <button class="choice" data-val="تجاري">
+          <svg class="ic" viewBox="0 0 24 24" fill="none"><path d="M4 21V9l8-5 8 5v12M9 21v-6h6v6M4 9h16" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg>
+          <div><div class="cc-title">تجاري</div><div class="cc-sub">محلات، مكاتب، مولات صغيرة</div></div>
+        </button>
+        <button class="choice" data-val="صناعي">
+          <svg class="ic" viewBox="0 0 24 24" fill="none"><path d="M3 21h18M5 21V11l4 3v-3l4 3V7l4 3v11" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg>
+          <div><div class="cc-title">صناعي</div><div class="cc-sub">معامل ومنشآت بأحمال كبيرة</div></div>
+        </button>
+        <button class="choice" data-val="زراعي">
+          <svg class="ic" viewBox="0 0 24 24" fill="none"><path d="M12 3c3 3 3 7 0 10-3-3-3-7 0-10zM12 13v8M7 21h10" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg>
+          <div><div class="cc-title">زراعي</div><div class="cc-sub">مضخات ري وأنظمة حقول ومزارع</div></div>
+        </button>
+      </div>
+      <div class="stepnav"><button class="btn btn-primary" id="next1" disabled>التالي</button></div>
+    </div>
+
+    <!-- STEP 2 -->
+    <div class="step" id="step2" hidden>
+      <div class="stephead"><div class="stepno">2</div><div class="stephead-text"><h2>نوع النظام المرغوب</h2></div></div>
+      <p class="stephead-sub">كل نوع بطارية له عمر وأداء مختلف — يمكنك المقارنة لاحقًا في النتيجة.</p>
+      <div class="choices" id="systemChoices">
+        <button class="choice" data-val="tubular">
+          <svg class="ic" viewBox="0 0 24 24" fill="none"><rect x="4" y="7" width="16" height="12" rx="1.5" stroke="currentColor" stroke-width="1.8"/><path d="M9 7V5h6v2" stroke="currentColor" stroke-width="1.8"/></svg>
+          <div><div class="cc-title">نظام أنبوبي هندي</div><div class="cc-sub">تكلفة أولية أقل، عمر افتراضي 3–5 سنوات</div></div>
+        </button>
+        <button class="choice" data-val="lithium">
+          <svg class="ic" viewBox="0 0 24 24" fill="none"><path d="M13 3L5 14h6l-1 7 8-11h-6l1-7z" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"/></svg>
+          <div><div class="cc-title">نظام ليثيوم</div><div class="cc-sub">حجم أصغر وكفاءة أعلى، عمر افتراضي 8–10 سنوات</div></div>
+        </button>
+        <button class="choice" data-val="rack">
+          <svg class="ic" viewBox="0 0 24 24" fill="none"><rect x="4" y="4" width="16" height="4.5" rx="1" stroke="currentColor" stroke-width="1.6"/><rect x="4" y="9.7" width="16" height="4.5" rx="1" stroke="currentColor" stroke-width="1.6"/><rect x="4" y="15.4" width="16" height="4.5" rx="1" stroke="currentColor" stroke-width="1.6"/></svg>
+          <div><div class="cc-title">نظام Rack صناعي</div><div class="cc-sub">وحدات معيارية قابلة للتوسّع للمنشآت الكبيرة</div></div>
+        </button>
+      </div>
+      <div class="section-title" style="margin-top:6px;">نوع الألواح</div>
+      <div class="choices" id="panelChoices">
+        <button class="choice" data-val="590" data-watt="590" data-amp="2.3">
+          <svg class="ic" viewBox="0 0 24 24" fill="none"><rect x="4" y="4" width="16" height="16" rx="1.5" stroke="currentColor" stroke-width="1.8"/><path d="M4 9.3h16M4 14.6h16M9.3 4v16M14.6 4v16" stroke="currentColor" stroke-width="1.2"/></svg>
+          <div><div class="cc-title">لوح قياسي 590 واط</div><div class="cc-sub">تيار تشغيل ≈ 2.3 أمبير للوح الواحد</div></div>
+        </button>
+        <button class="choice" data-val="730" data-watt="730" data-amp="2.7">
+          <svg class="ic" viewBox="0 0 24 24" fill="none"><rect x="3" y="3" width="18" height="18" rx="1.5" stroke="currentColor" stroke-width="1.8"/><path d="M3 9h18M3 15h18M9 3v18M15 3v18" stroke="currentColor" stroke-width="1.2"/></svg>
+          <div><div class="cc-title">لوح عملاق 730 واط</div><div class="cc-sub">تيار تشغيل ≈ 2.7 أمبير للوح الواحد</div></div>
+        </button>
+      </div>
+
+      <div class="stepnav">
+        <button class="btn btn-ghost" id="back2">السابق</button>
+        <button class="btn btn-primary" id="next2" disabled>التالي</button>
+      </div>
+    </div>
+
+    <!-- STEP 3 -->
+    <div class="step" id="step3" hidden>
+      <div class="stephead"><div class="stepno">3</div><div class="stephead-text"><h2>جدول الأحمال</h2></div></div>
+      <p class="stephead-sub">حرّك المؤشر لتقدير السحب بالأمبير في كل فترة — لا حاجة لأي حسابات.</p>
+
+      <div class="period day">
+        <div class="period-top"><span class="period-name">الفترة النهارية</span><span class="period-hours">8 صباحًا – 5 مساءً</span></div>
+        <div class="period-src">يعتمد على أداء الألواح مباشرة</div>
+        <div class="amp-row">
+          <input type="range" id="dayAmp" min="0" max="60" value="8" step="1">
+          <div class="amp-val"><span id="dayAmpVal">8</span> <span>أمبير</span></div>
+        </div>
+      </div>
+
+      <div class="period evening">
+        <div class="period-top"><span class="period-name">الفترة المسائية</span><span class="period-hours">5 – 12 مساءً</span></div>
+        <div class="period-src">تعتمد على البطارية</div>
+        <div class="amp-row">
+          <input type="range" id="eveAmp" min="0" max="60" value="12" step="1">
+          <div class="amp-val"><span id="eveAmpVal">12</span> <span>أمبير</span></div>
+        </div>
+      </div>
+
+      <div class="period night">
+        <div class="period-top"><span class="period-name">الفترة الليلية</span><span class="period-hours">12 – 7 صباحًا</span></div>
+        <div class="period-src">تعتمد على البطارية</div>
+        <div class="amp-row">
+          <input type="range" id="nightAmp" min="0" max="60" value="5" step="1">
+          <div class="amp-val"><span id="nightAmpVal">5</span> <span>أمبير</span></div>
+        </div>
+      </div>
+
+      <div class="stepnav">
+        <button class="btn btn-ghost" id="back3">السابق</button>
+        <button class="btn btn-primary" id="next3">عرض التوصية</button>
+      </div>
+    </div>
+
+    <!-- STEP 4: RESULTS -->
+    <div class="step" id="step4" hidden>
+      <div class="stephead"><div class="stepno">4</div><div class="stephead-text"><h2>المنظومة المقترحة</h2></div></div>
+
+      <div class="reco-card">
+        <div class="reco-label">التوصية الأولية بناءً على مدخلاتك</div>
+        <div class="reco-title" id="recoTitle">—</div>
+        <div class="reco-grid">
+          <div class="reco-item"><div class="k">سعة الإنفرتر</div><div class="v" id="recoInverter">—</div></div>
+          <div class="reco-item"><div class="k">البطارية</div><div class="v" id="recoBattery">—</div></div>
+          <div class="reco-item"><div class="k">الألواح</div><div class="v" id="recoPanels">—</div></div>
+          <div class="reco-item"><div class="k">فولتية النظام</div><div class="v" id="recoVoltage">—</div></div>
+        </div>
+      </div>
+
+      <div class="section-title">قارن نوع البطارية</div>
+      <div class="toggle-row">
+        <button class="toggle" id="toggleTubular">أنبوبي هندي</button>
+        <button class="toggle" id="toggleLithium">ليثيوم</button>
+      </div>
+
+      <div class="section-title">كيف يغطي النظام يومك</div>
+      <div class="timeline">
+        <div class="timeline-bar">
+          <div class="timeline-seg" id="tlDay" style="background:#E8A23D;">نهار — ألواح</div>
+          <div class="timeline-seg" id="tlEveNight" style="background:#24707F; color:#F4EEDF;">مساء وليل — بطارية</div>
+        </div>
+        <div class="timeline-legend">
+          <span><i class="legend-dot" style="background:#E8A23D"></i>9 ساعات شمس</span>
+          <span><i class="legend-dot" style="background:#24707F"></i>14 ساعة بطارية</span>
+        </div>
+      </div>
+
+      <div class="section-title">السحب حسب الفترة (أمبير)</div>
+      <div class="chart-wrap">
+        <svg id="barChart" viewBox="0 0 280 130" width="100%" height="130"></svg>
+      </div>
+
+      <div class="section-title">الفرق بين الأنواع</div>
+      <div class="compare">
+        <div class="col" id="colTubular">
+          <h4>أنبوبي هندي</h4>
+          <ul>
+            <li>تكلفة أولية أقل</li>
+            <li>عمر افتراضي 3–5 سنوات</li>
+            <li>يحتاج فحص مستوى الماء دوريًا</li>
+            <li>حجم ووزن أكبر</li>
+          </ul>
+        </div>
+        <div class="col" id="colLithium">
+          <h4>ليثيوم</h4>
+          <ul>
+            <li>عمر افتراضي 8–10 سنوات</li>
+            <li>حجم أصغر وبلا صيانة</li>
+            <li>كفاءة تفريغ وشحن أعلى</li>
+            <li>تكلفة أولية أعلى</li>
+          </ul>
+        </div>
+      </div>
+
+      <p class="note">تقدير أولي بناءً على: عمق تفريغ 50% للأنبوبي و85% لليثيوم، و5.5 ساعة ذروة شمسية لحساب عدد الألواح. التصميم النهائي وعدد القطع الدقيق يُحدَّد بعد تواصل مباشر مع فريقنا.</p>
+
+      <div class="contact-card">
+        <h3>احصل على عرض سعر دقيق</h3>
+        <p>القامشلي – جمعاية – بجانب مطعم الريف. تواصل مباشرة لتثبيت هذه التوصية أو تعديلها حسب موقعك.</p>
+        <div class="mgr">
+          <div><div class="mgr-name">خضر العلي أبو احمد</div><div class="mgr-role">الإدارة</div></div>
+          <div class="mgr-actions">
+            <a class="icon-btn wa" href="https://wa.me/963936841055" target="_blank" rel="noopener"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 2a10 10 0 0 0-8.6 15L2 22l5.2-1.4A10 10 0 1 0 12 2zm0 18a8 8 0 0 1-4.1-1.1l-.3-.2-3 .8.8-2.9-.2-.3A8 8 0 1 1 12 20zm4.4-6c-.2-.1-1.4-.7-1.6-.8-.2-.1-.4-.1-.6.1s-.7.8-.9 1-.4.2-.6.1a6.6 6.6 0 0 1-2-1.2 7.3 7.3 0 0 1-1.3-1.7c-.1-.2 0-.4.1-.5s.3-.4.4-.5.1-.2.2-.4 0-.3 0-.5-.6-1.5-.8-2-.4-.4-.6-.4h-.5a1 1 0 0 0-.7.3 3 3 0 0 0-.9 2.2 5.2 5.2 0 0 0 1.1 2.8 12 12 0 0 0 4.6 4.1c.6.3 1.1.4 1.5.6a3.6 3.6 0 0 0 1.7.1 2.8 2.8 0 0 0 1.8-1.3 2.3 2.3 0 0 0 .2-1.3c-.1-.1-.3-.2-.6-.3z"/></svg></a>
+            <a class="icon-btn" href="tel:0936841055"><svg viewBox="0 0 24 24" fill="none"><path d="M4 5c0 8.5 6.5 15 15 15l3-3.5-5-2-2 2a12 12 0 0 1-6-6l2-2-2-5L5 4H4z" stroke="currentColor" stroke-width="1.6" stroke-linejoin="round"/></svg></a>
+          </div>
+        </div>
+      </div>
+
+      <button class="restart" id="restartBtn">تقييم جديد</button>
+    </div>
+  </section>
+
+  <footer>© شام للطاقة الشمسية — مستشار الطاقة الذكي</footer>
+  <div class="credit-bar">تمت برمجة الموقع بواسطة المهندس عبدالله القاطع</div>
+</div>
+
+<script>
+(function(){
+  var state = { activity:null, system:null, panel:null, panelWatt:null, panelAmp:null, day:8, eve:12, night:5, compareType:null };
+
+  var hero = document.getElementById('hero');
+  var wizard = document.getElementById('wizard');
+  var startBtn = document.getElementById('startBtn');
+  var steps = [1,2,3,4].map(function(n){ return document.getElementById('step'+n); });
+  var prog = [document.getElementById('p1'),document.getElementById('p2'),document.getElementById('p3'),document.getElementById('p4')];
+
+  function showStep(n){
+    steps.forEach(function(s,i){ s.hidden = (i !== n-1); });
+    prog.forEach(function(p,i){ p.style.width = (i < n ? '100%':'0%'); });
+    window.scrollTo({top:0, behavior:'smooth'});
+  }
+
+  startBtn.addEventListener('click', function(){
+    hero.hidden = true; wizard.hidden = false; showStep(1);
+  });
+
+  /* --- step 1 --- */
+  var actChoices = document.querySelectorAll('#activityChoices .choice');
+  var next1 = document.getElementById('next1');
+  actChoices.forEach(function(btn){
+    btn.addEventListener('click', function(){
+      actChoices.forEach(function(b){ b.classList.remove('selected'); });
+      btn.classList.add('selected');
+      state.activity = btn.getAttribute('data-val');
+      next1.disabled = false;
+    });
+  });
+  next1.addEventListener('click', function(){ showStep(2); });
+
+  /* --- step 2 --- */
+  var sysChoices = document.querySelectorAll('#systemChoices .choice');
+  var panelChoices = document.querySelectorAll('#panelChoices .choice');
+  var next2 = document.getElementById('next2');
+  function check2(){ next2.disabled = !(state.system && state.panel); }
+  sysChoices.forEach(function(btn){
+    btn.addEventListener('click', function(){
+      sysChoices.forEach(function(b){ b.classList.remove('selected'); });
+      btn.classList.add('selected');
+      state.system = btn.getAttribute('data-val');
+      check2();
+    });
+  });
+  panelChoices.forEach(function(btn){
+    btn.addEventListener('click', function(){
+      panelChoices.forEach(function(b){ b.classList.remove('selected'); });
+      btn.classList.add('selected');
+      state.panel = btn.getAttribute('data-val');
+      state.panelWatt = parseFloat(btn.getAttribute('data-watt'));
+      state.panelAmp = parseFloat(btn.getAttribute('data-amp'));
+      check2();
+    });
+  });
+  document.getElementById('back2').addEventListener('click', function(){ showStep(1); });
+  next2.addEventListener('click', function(){ showStep(3); });
+
+  /* --- step 3 --- */
+  function bindSlider(rangeId, valId, key){
+    var r = document.getElementById(rangeId), v = document.getElementById(valId);
+    r.addEventListener('input', function(){ v.textContent = r.value; state[key] = parseInt(r.value,10); });
+  }
+  bindSlider('dayAmp','dayAmpVal','day');
+  bindSlider('eveAmp','eveAmpVal','eve');
+  bindSlider('nightAmp','nightAmpVal','night');
+  document.getElementById('back3').addEventListener('click', function(){ showStep(2); });
+  document.getElementById('next3').addEventListener('click', function(){
+    computeAndRender();
+    showStep(4);
+  });
+
+  document.getElementById('restartBtn').addEventListener('click', function(){
+    state = { activity:null, system:null, panel:null, panelWatt:null, panelAmp:null, day:8, eve:12, night:5, compareType:null };
+    actChoices.forEach(function(b){ b.classList.remove('selected'); });
+    sysChoices.forEach(function(b){ b.classList.remove('selected'); });
+    panelChoices.forEach(function(b){ b.classList.remove('selected'); });
+    next1.disabled = true; next2.disabled = true;
+    document.getElementById('dayAmp').value = 8; document.getElementById('dayAmpVal').textContent = 8;
+    document.getElementById('eveAmp').value = 12; document.getElementById('eveAmpVal').textContent = 12;
+    document.getElementById('nightAmp').value = 5; document.getElementById('nightAmpVal').textContent = 5;
+    wizard.hidden = true; hero.hidden = false;
+    window.scrollTo({top:0, behavior:'smooth'});
+  });
+
+  /* --- calculation engine (Amp / Ah based, per shop's own sizing rules) --- */
+  var AC_V = 220;                 // used only to translate load amps into watts for reference
+  var HOURS = { day:9, eve:7, night:7 };
+  var DOD = { tubular:0.5, lithium:0.85 };   // safe usable-capacity margin
+  var PEAK_SUN_H = 5.5;            // effective full-sun hours used to size recharge current
+  var CHARGE_EFF = 0.9;            // wiring / charge-controller losses
+  var STD_INV = [2200,3200,4200,4500,5500,6000,7000,7500,11000]; // available inverter sizes (watt)
+
+  var LITHIUM_MODELS = [
+    { label:'5 كيلو', ah:25 },
+    { label:'7 كيلو', ah:40 },
+    { label:'16 كيلو', ah:60 },
+    { label:'32 كيلو', ah:120 }
+  ];
+  var TUBULAR_AH = 12; // single tubular battery = 12Ah (1A/12h)
+
+  // inverter must always be a bit larger than the panel array, never smaller
+  function pickInverter(totalPanelW){
+    for (var i=0;i<STD_INV.length;i++){ if (STD_INV[i] > totalPanelW) return { size:STD_INV[i], multi:1 }; }
+    var count = Math.ceil(totalPanelW/STD_INV[STD_INV.length-1]);
+    return { size:STD_INV[STD_INV.length-1], multi:count };
+  }
+
+  // pick the lithium model + count with the least wasted capacity above what's needed
+  function bestLithiumCombo(neededAh){
+    var best = null;
+    LITHIUM_MODELS.forEach(function(m){
+      var count = Math.max(1, Math.ceil(neededAh/m.ah));
+      var total = count*m.ah;
+      var waste = total - neededAh;
+      if (!best || waste < best.waste || (waste===best.waste && count < best.count)){
+        best = { label:m.label, ah:m.ah, count:count, total:total, waste:waste };
+      }
+    });
+    return best;
+  }
+
+  function computeFor(type){
+    var dayW = state.day*AC_V, eveW = state.eve*AC_V, nightW = state.night*AC_V;
+    var peakW = Math.max(dayW, eveW, nightW, 1);
+    var sysV = peakW < 3000 ? 24 : 48;
+
+    // battery sizing: pure Ah arithmetic on the amps entered in step 3
+    var rawAh = state.eve*HOURS.eve + state.night*HOURS.night;
+    var dod = DOD[type];
+    var neededAh = rawAh/dod;
+
+    var battery;
+    if (type==='lithium'){
+      var combo = bestLithiumCombo(neededAh);
+      battery = { count:combo.count, unitLabel:combo.label + ' ليثيوم', unitAh:combo.ah, totalAh:combo.total };
+    } else {
+      var count = Math.max(1, Math.ceil(neededAh/TUBULAR_AH));
+      battery = { count:count, unitLabel:'أنبوبي 12Ah', unitAh:TUBULAR_AH, totalAh:count*TUBULAR_AH };
+    }
+
+    // panel sizing: cover the day load current PLUS the current needed to recharge what the battery used overnight
+    var rechargeAmps = rawAh/(PEAK_SUN_H*CHARGE_EFF);
+    var panelAmpsNeeded = state.day + rechargeAmps;
+    var panelAmpRating = state.panelAmp || 2.3;
+    var panelWatt = state.panelWatt || 590;
+    var numPanels = Math.max(2, Math.ceil(panelAmpsNeeded/panelAmpRating));
+    var totalPanelW = numPanels*panelWatt;
+
+    // inverter: smallest standard size that is a bit larger than the panel array's total wattage
+    var inv = pickInverter(totalPanelW);
+
+    return {
+      dayW:dayW, eveW:eveW, nightW:nightW, peakW:peakW,
+      inv:inv, sysV:sysV,
+      neededAh:neededAh, rawAh:rawAh, battery:battery,
+      numPanels:numPanels, panelWatt:panelWatt, totalPanelW:totalPanelW,
+      panelAmpsNeeded:panelAmpsNeeded
+    };
+  }
+
+  function fmt(n){ return Math.round(n).toLocaleString('en-US'); }
+
+  function renderChart(r){
+    var svg = document.getElementById('barChart');
+    var W=280, H=130, base=105, gap=26, barW=46;
+    var vals = [r.dayW/AC_V, r.eveW/AC_V, r.nightW/AC_V];
+    var labels = ['نهار','مساء','ليل'];
+    var colors = ['#E8A23D','#F2B75C','#8892B0'];
+    var maxV = Math.max.apply(null, vals.concat([1]));
+    var svgns = 'http://www.w3.org/2000/svg';
+    while (svg.firstChild) svg.removeChild(svg.firstChild);
+    vals.forEach(function(v,i){
+      var x = 26 + i*(barW+gap);
+      var h = Math.max(4, (v/maxV)*70);
+      var y = base - h;
+      var rect = document.createElementNS(svgns,'rect');
+      rect.setAttribute('x', x); rect.setAttribute('y', y);
+      rect.setAttribute('width', barW); rect.setAttribute('height', h);
+      rect.setAttribute('rx', 6); rect.setAttribute('fill', colors[i]);
+      svg.appendChild(rect);
+
+      var val = document.createElementNS(svgns,'text');
+      val.setAttribute('x', x+barW/2); val.setAttribute('y', y-8);
+      val.setAttribute('text-anchor','middle'); val.setAttribute('fill','#F4EEDF');
+      val.setAttribute('font-size','12'); val.setAttribute('font-family','IBM Plex Sans Arabic');
+      val.textContent = Math.round(v) + 'A';
+      svg.appendChild(val);
+
+      var lbl = document.createElementNS(svgns,'text');
+      lbl.setAttribute('x', x+barW/2); lbl.setAttribute('y', base+18);
+      lbl.setAttribute('text-anchor','middle'); lbl.setAttribute('fill','rgba(244,238,223,0.6)');
+      lbl.setAttribute('font-size','12'); lbl.setAttribute('font-family','IBM Plex Sans Arabic');
+      lbl.textContent = labels[i];
+      svg.appendChild(lbl);
+    });
+    var baseline = document.createElementNS(svgns,'line');
+    baseline.setAttribute('x1',10); baseline.setAttribute('x2',W-10);
+    baseline.setAttribute('y1',base); baseline.setAttribute('y2',base);
+    baseline.setAttribute('stroke','rgba(244,238,223,0.18)');
+    svg.appendChild(baseline);
+  }
+
+  function renderResults(type){
+    var r = computeFor(type);
+    var typeLabel = type==='lithium' ? 'ليثيوم' : 'أنبوبي هندي';
+    var invText = (r.inv.multi>1 ? r.inv.multi+' × ' : '') + fmt(r.inv.size) + ' واط';
+    document.getElementById('recoTitle').textContent = 'إنفرتر ' + invText + ' + بطارية ' + typeLabel;
+    document.getElementById('recoInverter').textContent = invText;
+    document.getElementById('recoBattery').textContent = r.battery.count + ' × ' + r.battery.unitLabel + ' (' + r.battery.totalAh + 'Ah)';
+    document.getElementById('recoPanels').textContent = r.numPanels + ' لوح ' + r.panelWatt + 'واط (' + (Math.round(r.totalPanelW/100)/10) + ' كيلوواط)';
+    document.getElementById('recoVoltage').textContent = r.sysV + ' فولت';
+    renderChart(r);
+
+    document.getElementById('colTubular').classList.toggle('hi', type==='tubular');
+    document.getElementById('colLithium').classList.toggle('hi', type==='lithium');
+    document.getElementById('toggleTubular').classList.toggle('active', type==='tubular');
+    document.getElementById('toggleLithium').classList.toggle('active', type==='lithium');
+  }
+
+  function computeAndRender(){
+    var initial = state.system==='tubular' ? 'tubular' : 'lithium'; // rack uses the same modular lithium Ah table
+    state.compareType = initial;
+    renderResults(initial);
+  }
+
+  document.getElementById('toggleTubular').addEventListener('click', function(){
+    state.compareType='tubular'; renderResults('tubular');
+  });
+  document.getElementById('toggleLithium').addEventListener('click', function(){
+    state.compareType='lithium'; renderResults('lithium');
+  });
+})();
+</script>
+</body>
+</html>
